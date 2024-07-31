@@ -12,6 +12,8 @@ public:
     Graph(int vertices);
     // Method to add an edge between two vertices
     void addEdge(int u, int v);
+    // Method which returns if this edge exists
+    bool hasEdge(int u, int v);
     // Method to check if the graph has an Eulerian circuit
     bool hasEulerianCircuit();
     // Method to find and print the Eulerian circuit
@@ -35,11 +37,15 @@ Graph::Graph(int v) : vertices(v)
     adjMatrix.resize(vertices, std::vector<int>(vertices, 0));
 }
 
+bool Graph::hasEdge(int u, int v){
+    return adjMatrix[u][v];
+}
+
 // Method to add an edge to the graph
 void Graph::addEdge(int u, int v)
 {
-    adjMatrix[u][v]++; // Increment the edge count for u -> v
-    adjMatrix[v][u]++; // Increment the edge count for v -> u
+    adjMatrix[u][v] = 1; // Increment the edge count for u -> v
+    adjMatrix[v][u] = 1; // Increment the edge count for v -> u
 
 }
 
@@ -153,8 +159,17 @@ void generateRandomGraph(Graph& g, int edges, int vertices, unsigned int seed)
     {
         int u = rand() % vertices; // Random vertex u
         int v = rand() % vertices; // Random vertex v
-        std::cout << "edge : " << u <<","<< v << "\n";
-        g.addEdge(u, v); // Add edge u -> v to the graph
+        // Check no duplicating edges or a vertex with an edge to itself
+        if (g.hasEdge(u,v) || u == v)
+        {
+            i--;
+        }
+        else
+        {
+            std::cout << "edge : " << u <<","<< v << "\n";
+            g.addEdge(u, v); // Add edge u -> v and v -> u to the graph
+        }
+        
     }
 }
 
