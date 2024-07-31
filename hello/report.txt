@@ -1,0 +1,2 @@
+error - there was a memory allocation for string and then there was a strcpy to it
+solution - free the string at the end of the code
