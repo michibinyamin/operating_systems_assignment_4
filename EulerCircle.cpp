@@ -173,6 +173,10 @@ void generateRandomGraph(Graph& g, int edges, int vertices, unsigned int seed)
     }
 }
 
+// Works with - ./EulerCircle -v 5 -e 10 -s 6    
+// doesnot work with - ./EulerCircle -v 5 -e 9 -s 1
+
+
 int main(int argc, char** argv)
 {
     int vertices = 0;

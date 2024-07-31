@@ -1,0 +1,222 @@
+        -:    0:Source:EulerCircle.cpp
+        -:    0:Graph:EulerCircle.gcno
+        -:    0:Data:EulerCircle.gcda
+        -:    0:Runs:1
+        -:    1:#include <iostream>
+        -:    2:#include <vector>
+        -:    3:#include <cstdlib>
+        -:    4:#include <ctime>
+        -:    5:#include <getopt.h>
+        -:    6:#include <algorithm>
+        -:    7:
+        -:    8:// Class representing a graph
+        1:    9:class Graph {
+        -:   10:public:
+        -:   11:    // Constructor to initialize the graph with a given number of vertices
+        -:   12:    Graph(int vertices);
+        -:   13:    // Method to add an edge between two vertices
+        -:   14:    void addEdge(int u, int v);
+        -:   15:    // Method which returns if this edge exists
+        -:   16:    bool hasEdge(int u, int v);
+        -:   17:    // Method to check if the graph has an Eulerian circuit
+        -:   18:    bool hasEulerianCircuit();
+        -:   19:    // Method to find and print the Eulerian circuit
+        -:   20:    void findEulerianCircuit();
+        -:   21:
+        -:   22:private:
+        -:   23:    int vertices; // Number of vertices in the graph
+        -:   24:    std::vector<std::vector<int>> adjMatrix; // Adjacency matrix to represent the graph
+        -:   25:    // Helper method to check if the graph is connected
+        -:   26:    bool isConnected();
+        -:   27:    // Depth First Search (DFS) to check connectivity
+        -:   28:    void DFS(int v, std::vector<bool>& visited);
+        -:   29:    // Helper method to find Eulerian path
+        -:   30:    bool hasEulerianPathUtil(int v, std::vector<int>& circuit);
+        -:   31:};
+        -:   32:
+        -:   33:// Constructor implementation
+        1:   34:Graph::Graph(int v) : vertices(v)
+        -:   35:{
+        -:   36:    // Initialize the adjacency matrix with zeros
+        1:   37:    adjMatrix.resize(vertices, std::vector<int>(vertices, 0));
+        1:   38:}
+        -:   39:
+    #####:   40:bool Graph::hasEdge(int u, int v){
+       9*:   41:    return adjMatrix[u][v];
+        -:   42:}
+        -:   43:
+        -:   44:// Method to add an edge to the graph
+        7:   45:void Graph::addEdge(int u, int v)
+        -:   46:{
+        7:   47:    adjMatrix[u][v] = 1; // Increment the edge count for u -> v
+        7:   48:    adjMatrix[v][u] = 1; // Increment the edge count for v -> u
+        -:   49:
+        7:   50:}
+        -:   51:
+        -:   52:// Method to check if the graph is connected
+        1:   53:bool Graph::isConnected()
+        -:   54:{
+        -:   55:    int i;
+        1:   56:    std::vector<bool> visited(vertices, false);
+        -:   57:
+        -:   58:    // Find a vertex with a non-zero degree
+       1*:   59:    for (i = 0; i < vertices; ++i)
+        -:   60:    {
+        2:   61:        if (std::count(adjMatrix[i].begin(), adjMatrix[i].end(), 0) != vertices)
+        -:   62:        {
+        -:   63:            break;
+        -:   64:        }
+        -:   65:    }
+        1:   66:    if (i == vertices)
+        -:   67:    {
+        -:   68:        return true; // If no such vertex is found, return true
+        -:   69:    }
+        -:   70:
+        1:   71:    DFS(i, visited); // Perform DFS from the first non-zero degree vertex
+        -:   72:
+        -:   73:    // Check if all non-zero degree vertices are visited
+        6:   74:    for (i = 0; i < vertices; ++i)
+        -:   75:    {
+       5*:   76:        if (!visited[i] && std::count(adjMatrix[i].begin(), adjMatrix[i].end(), 0) != vertices)
+        -:   77:        {
+        -:   78:            return false;
+        -:   79:        }
+        -:   80:    }
+        -:   81:    return true;
+        -:   82:}
+        -:   83:
+        -:   84:// DFS implementation to check connectivity
+        5:   85:void Graph::DFS(int v, std::vector<bool>& visited)
+        -:   86:{
+        5:   87:    visited[v] = true; // Mark the current vertex as visited
+        -:   88:    // Visit all adjacent vertices
+       30:   89:    for (int i = 0; i < vertices; ++i)
+        -:   90:    {
+       39:   91:        if (adjMatrix[v][i] && !visited[i])
+        -:   92:        {
+        4:   93:            DFS(i, visited);
+        -:   94:        }
+        -:   95:    }
+        5:   96:}
+        -:   97:
+        -:   98:// Method to check if the graph has an Eulerian circuit
+        1:   99:bool Graph::hasEulerianCircuit()
+        -:  100:{
+        1:  101:    if (!isConnected())
+        -:  102:    {
+        -:  103:        return false; // Graph must be connected
+        -:  104:    }
+        -:  105:
+        -:  106:    // All vertices with non-zero degree must have an even degree
+        6:  107:    for (int i = 0; i < vertices; ++i)
+        -:  108:    {
+       10:  109:        if (std::count(adjMatrix[i].begin(), adjMatrix[i].end(), 1) % 2 != 0)
+        -:  110:        {
+        -:  111:            return false;
+        -:  112:        }
+        -:  113:    }
+        -:  114:    return true;
+        -:  115:}
+        -:  116:
+        -:  117:// Helper method to find Eulerian path
+        8:  118:bool Graph::hasEulerianPathUtil(int v, std::vector<int>& circuit)
+        -:  119:{
+        -:  120:    // Explore all edges from the current vertex
+       48:  121:    for (int u = 0; u < vertices; ++u)
+        -:  122:    {
+       40:  123:        if (adjMatrix[v][u])
+        -:  124:        {
+        7:  125:            adjMatrix[v][u]--; // Remove the edge v -> u
+        7:  126:            adjMatrix[u][v]--; // Remove the edge u -> v
+        7:  127:            hasEulerianPathUtil(u, circuit); // Recursively find the path from u
+        -:  128:        }
+        -:  129:    }
+        8:  130:    circuit.push_back(v); // Add the vertex to the circuit
+        8:  131:    return true;
+        -:  132:}
+        -:  133:
+        -:  134:// Method to find and print the Eulerian circuit
+        1:  135:void Graph::findEulerianCircuit()
+        -:  136:{
+        1:  137:    if (!hasEulerianCircuit())
+        -:  138:    {
+    #####:  139:        std::cout << "Euler's circle does not exist" << std::endl;
+    #####:  140:        return;
+        -:  141:    }
+        -:  142:
+        -:  143:    std::vector<int> circuit;
+        1:  144:    hasEulerianPathUtil(0, circuit); // Find the Eulerian path starting from vertex 0
+        -:  145:
+        1:  146:    std::cout << "Here is Euler's circle: ";
+        9:  147:    for (auto it = circuit.rbegin(); it != circuit.rend(); ++it)
+        -:  148:    {
+        8:  149:        std::cout << *it << " "; // Print the Eulerian circuit
+        -:  150:    }
+        -:  151:    std::cout << std::endl;
+        -:  152:}
+        -:  153:
+        -:  154:// Function to generate a random graph
+        1:  155:void generateRandomGraph(Graph& g, int edges, int vertices, unsigned int seed)
+        -:  156:{
+        1:  157:    srand(seed); // Seed the random number generator
+       10:  158:    for (int i = 0; i < edges; ++i)
+        -:  159:    {
+        9:  160:        int u = rand() % vertices; // Random vertex u
+        9:  161:        int v = rand() % vertices; // Random vertex v
+        -:  162:        // Check no duplicating edges or a vertex with an edge to itself
+        9:  163:        if (g.hasEdge(u,v) || u == v)
+        -:  164:        {
+        2:  165:            i--;
+        -:  166:        }
+        -:  167:        else
+        -:  168:        {
+        7:  169:            std::cout << "edge : " << u <<","<< v << "\n";
+        7:  170:            g.addEdge(u, v); // Add edge u -> v and v -> u to the graph
+        -:  171:        }
+        -:  172:        
+        -:  173:    }
+        1:  174:}
+        -:  175:
+        -:  176:// Works with - ./EulerCircle -v 5 -e 10 -s 6    
+        -:  177:// doesnot work with - ./EulerCircle -v 5 -e 9 -s 1
+        -:  178:
+        -:  179:
+        1:  180:int main(int argc, char** argv)
+        -:  181:{
+        -:  182:    int vertices = 0;
+        -:  183:    int edges = 0;
+        -:  184:    int option;
+        1:  185:    unsigned int seed = static_cast<unsigned int>(time(nullptr));
+        -:  186:
+        -:  187:    // Parse command-line options
+        4:  188:    while ((option = getopt(argc, argv, "v:e:s:")) != -1)
+        -:  189:    {
+        3:  190:        switch (option)
+        -:  191:        {
+        1:  192:            case 'v':
+        1:  193:                vertices = std::atoi(optarg);
+        1:  194:                break;
+        1:  195:            case 'e':
+        1:  196:                edges = std::atoi(optarg);
+        1:  197:                break;
+        1:  198:            case 's':
+        1:  199:                seed = static_cast<unsigned int>(std::atoi(optarg));
+        1:  200:                break;
+    #####:  201:            default:
+    #####:  202:                std::cerr << "Usage: " << argv[0] << " -v vertices -e edges [-s seed]" << std::endl;
+    #####:  203:                exit(EXIT_FAILURE);
+        -:  204:        }
+        -:  205:    }
+        -:  206:
+        -:  207:    // Ensure vertices and edges are positive integers
+        1:  208:    if (vertices <= 0 || edges <= 0) {
+    #####:  209:        std::cerr << "Error: invalid vertices or edges!" << std::endl;
+    #####:  210:        exit(EXIT_FAILURE);
+        -:  211:    }
+        -:  212:
+        1:  213:    Graph g(vertices); // Create a graph with the specified number of vertices
+        1:  214:    generateRandomGraph(g, edges, vertices, seed); // Generate a random graph with the specified edges and vertices
+        1:  215:    g.findEulerianCircuit(); // Find and print the Eulerian circuit
+        -:  216:
+        -:  217:    return 0;
+        -:  218:}

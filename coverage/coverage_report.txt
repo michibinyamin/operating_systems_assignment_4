@@ -1,0 +1,61 @@
+File 'EulerCircle.cpp'
+Lines executed:89.47% of 76
+Creating 'EulerCircle.cpp.gcov'
+
+File '/usr/include/c++/11/iostream'
+No executable lines
+Removing 'iostream.gcov'
+
+File '/usr/include/c++/11/bits/stl_vector.h'
+Lines executed:64.18% of 67
+Creating 'stl_vector.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_algobase.h'
+Lines executed:53.85% of 26
+Creating 'stl_algobase.h.gcov'
+
+File '/usr/include/c++/11/bits/alloc_traits.h'
+Lines executed:100.00% of 2
+Creating 'alloc_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/vector.tcc'
+Lines executed:49.12% of 57
+Creating 'vector.tcc.gcov'
+
+File '/usr/include/c++/11/ext/new_allocator.h'
+Lines executed:62.50% of 8
+Creating 'new_allocator.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_uninitialized.h'
+Lines executed:87.50% of 16
+Creating 'stl_uninitialized.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator.h'
+Lines executed:87.50% of 8
+Creating 'stl_iterator.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_construct.h'
+Lines executed:100.00% of 3
+Creating 'stl_construct.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_bvector.h'
+Lines executed:96.08% of 51
+Creating 'stl_bvector.h.gcov'
+
+File '/usr/include/stdlib.h'
+Lines executed:100.00% of 1
+Creating 'stdlib.h.gcov'
+
+File '/usr/include/c++/11/ostream'
+Lines executed:100.00% of 1
+Creating 'ostream.gcov'
+
+File '/usr/include/c++/11/bits/predefined_ops.h'
+Lines executed:100.00% of 1
+Creating 'predefined_ops.h.gcov'
+
+File '/usr/include/c++/11/bits/locale_facets.h'
+Lines executed:42.86% of 7
+Creating 'locale_facets.h.gcov'
+
+Lines executed:73.77% of 324
