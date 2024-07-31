@@ -36,6 +36,14 @@ coverage_report: $(SRC)
 	gcov $(SRC) > coverage_report.txt
 	cat coverage_report.txt
 
+memcheck_report: $(SRC)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
+	valgrind --leak-check=full ./EulerCircle -v $(VERTICES) -e $(EDGES) -s $(SEED)
+
+callgraph: $(SRC)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
+	valgrind --tool=callgrind ./EulerCircle -v $(VERTICES) -e $(EDGES) -s $(SEED)
+
 # Clean rule to remove generated files
 clean:
-	rm -f $(TARGET) gmon.out profile_report.txt coverage_report.txt
+	rm -f $(TARGET) gmon.out 
