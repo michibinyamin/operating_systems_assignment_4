@@ -1,1 +1,2 @@
-there was a memory allocation for string and then there was a strcpy to it and there
+string_so_far is being assigned to point to string, this leaves the old allocation of string_so_far without a pointer
+which leads to memory leaks

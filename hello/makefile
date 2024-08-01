@@ -3,7 +3,7 @@
 # Variables
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11
-TARGET = hello
+TARGET = hello 
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all
 
 # Default target
@@ -19,7 +19,7 @@ run: $(TARGET)
 
 # Rule to run the program with Valgrind
 valgrind: $(TARGET)
-	$(VALGRIND) ./$(TARGET)
+	$(VALGRIND) ./hello world
 
 # Rule to clean up generated files
 clean:
