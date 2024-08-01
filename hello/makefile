@@ -2,9 +2,11 @@
 
 # Variables
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
+CFLAGS = -g -Wall -Wextra -std=c11
 TARGET = hello 
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all
+VALGRIND_GDB = valgrind --leak-check=full --vgdb=yes --vgdb-error=0
+
 
 # Default target
 all: $(TARGET)
@@ -20,6 +22,10 @@ run: $(TARGET)
 # Rule to run the program with Valgrind
 valgrind: $(TARGET)
 	$(VALGRIND) ./hello world
+
+# Rule to run the program with Valgrind with gdb
+valgrind_gdb: $(TARGET)
+	$(VALGRIND_GDB) ./hello world
 
 # Rule to clean up generated files
 clean:
