@@ -44,6 +44,6 @@ callgraph: $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 	valgrind --tool=callgrind ./EulerCircle -v $(VERTICES) -e $(EDGES) -s $(SEED)
 
-# Clean rule to remove generated files
+# Clean rule
 clean:
 	rm -f $(TARGET) gmon.out 
