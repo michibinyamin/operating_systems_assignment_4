@@ -1,4 +1,4 @@
-# Default values for parameters !!testing!!
+# Default values for parameters
 VERTICES ?= 5
 EDGES ?= 7
 SEED ?= 1
