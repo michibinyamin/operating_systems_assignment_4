@@ -1,34 +1,68 @@
-// Singleton.cpp
-#include "Singleton.h"
-#include <stdexcept>
+#include <pthread.h>
+#include <iostream>
 
-pthread_mutex_t SingletonBase::mutex = PTHREAD_MUTEX_INITIALIZER;
-SingletonBase* SingletonBase::instance = nullptr;
+// Abstract base class
+class SingletonBase {
+public:
+    // Delete copy constructor and assignment operator
+    SingletonBase(const SingletonBase&) = delete;
+    SingletonBase& operator=(const SingletonBase&) = delete;
 
-SingletonBase::SingletonBase() {
-    // Constructor code here
-}
-
-SingletonBase::~SingletonBase() {
-    // Destructor code here
-}
-
-SingletonBase* SingletonBase::getInstance() {
-    pthread_mutex_lock(&mutex);
-    if (instance == nullptr) {
-        initializeInstance();
+    // Public method to access the singleton instance
+    static SingletonBase* getInstance() {
+        pthread_mutex_lock(&mutex_);
+        if (!instance_) {
+            instance_ = createInstance();
+        }
+        pthread_mutex_unlock(&mutex_);
+        return instance_;
     }
-    pthread_mutex_unlock(&mutex);
-    return instance;
-}
 
-void SingletonBase::initializeInstance() {
-    if (instance == nullptr) {
-        instance = new SingletonBase();
+    // Virtual destructor for proper cleanup of derived classes
+    virtual ~SingletonBase() {}
+
+    // Pure virtual function to be implemented by derived classes
+    virtual void doSomething() const = 0;
+
+protected:
+    // Protected constructor to prevent direct instantiation
+    SingletonBase() {}
+
+    // Pure virtual function to create the singleton instance
+    static SingletonBase* createInstance();
+
+private:
+    static SingletonBase* instance_;
+    static pthread_mutex_t mutex_;
+    
+};
+
+// Initialize the static members
+SingletonBase* SingletonBase::instance_ = nullptr;
+pthread_mutex_t SingletonBase::mutex_ = PTHREAD_MUTEX_INITIALIZER;
+
+// Example derived class
+class DerivedSingleton : public SingletonBase {
+protected:
+    // Implement the pure virtual function to create the instance
+    static SingletonBase* createInstance() {
+        return new DerivedSingleton();
     }
-}
 
-void SingletonBase::destroyInstance() {
-    delete instance;
-    instance = nullptr;
+public:
+    // Implement the pure virtual function
+    void doSomething() const override {
+        std::cout << "Doing something in DerivedSingleton!" << std::endl;
+    }
+
+    // Protected constructor
+    DerivedSingleton() {}
+};
+
+// Example usage
+int main() {
+    SingletonBase* singleton = DerivedSingleton::getInstance();
+    singleton->doSomething();
+
+    return 0;
 }

@@ -1,7 +1,7 @@
 // main.cpp
 #include <iostream>
 #include "Singleton.h"
-#include "ScopeMutex.h"
+//#include "ScopeMutex.h"
 
 class MySingleton : public SingletonBase {
 public:
