@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <pthread.h>
+#include "Guard.cpp"
 
 // Forward declaration of ConcreteSingleton
 class ConcreteSingleton;
@@ -45,12 +46,14 @@ public:
 
 // Implementation of getInstance method
 AbstractSingleton* AbstractSingleton::getInstance() {
-    pthread_mutex_lock(&mutex);
+    //pthread_mutex_lock(&mutex);
+    Guard guard(mutex);
     if (!instance) {
         instance = new ConcreteSingleton();
     }
-    pthread_mutex_unlock(&mutex);
-    return instance;
+    //pthread_mutex_unlock(&mutex);
+    //delete guard;
+    return instance;    // Only when out of scope then the destructor of guard is called
 }
 
 int main() {
