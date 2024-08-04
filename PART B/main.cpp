@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <pthread.h>
 
 // Forward declaration of ConcreteSingleton
 class ConcreteSingleton;
@@ -23,10 +24,13 @@ protected:
 
 private:
     static AbstractSingleton* instance;
+    static pthread_mutex_t mutex;
 };
 
 // Initialize static member
 AbstractSingleton* AbstractSingleton::instance = nullptr;
+
+pthread_mutex_t AbstractSingleton::mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // Definition of ConcreteSingleton class
 class ConcreteSingleton : public AbstractSingleton {
@@ -41,9 +45,11 @@ public:
 
 // Implementation of getInstance method
 AbstractSingleton* AbstractSingleton::getInstance() {
+    pthread_mutex_lock(&mutex);
     if (!instance) {
         instance = new ConcreteSingleton();
     }
+    pthread_mutex_unlock(&mutex);
     return instance;
 }
 
