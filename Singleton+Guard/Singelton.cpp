@@ -52,7 +52,6 @@ AbstractSingleton* AbstractSingleton::getInstance() {
         instance = new ConcreteSingleton();
     }
     //pthread_mutex_unlock(&mutex);
-    //delete guard;
     return instance;    // Only when out of scope then the destructor of guard is called
 }
 

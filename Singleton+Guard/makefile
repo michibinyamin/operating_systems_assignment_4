@@ -3,9 +3,9 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -pthread
 
 # Source files and executable
-SRC = main.cpp
+SRC = singleton.cpp
 OBJ = $(SRC:.cpp=.o)
-EXE = singleton_example
+EXE = singleton
 
 # Default rule to build the executable
 all: $(EXE)
